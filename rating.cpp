@@ -23,7 +23,8 @@ struct Student {
     int id;
     string username;
     string password;
-    vector<int> ratedTeachers; // To track which teachers a student has rated
+    vector<int> assignedTeachers; // List of teacher IDs assigned to this student
+    vector<int> ratedTeachers;    // To track which teachers a student has rated
 };
 
 // Sample Teachers
@@ -35,12 +36,12 @@ Teacher teachers[5] = {
     {5, "Mrs. Garcia", 0, 0, 0, 0}
 };
 
-// Sample Students
+// Sample Students with manually assigned teachers
 Student students[4] = {
-    {1, "student1", "pass1", {}},
-    {2, "student2", "pass2", {}},
-    {3, "student3", "pass3", {}},
-    {4, "student4", "pass4", {}} 
+    {1, "student1", "pass1", {1, 2}, {}}, // Assigned Teachers: Mr. Smith, Mrs. Johnson
+    {2, "student2", "pass2", {2, 3}, {}}, // Assigned Teachers: Mrs. Johnson, Ms. Brown
+    {3, "student3", "pass3", {3, 4}, {}}, // Assigned Teachers: Ms. Brown, Mr. Lee
+    {4, "student4", "pass4", {4, 5}, {}}  // Assigned Teachers: Mr. Lee, Mrs. Garcia
 };
 
 // Helper function to classify comments
@@ -82,10 +83,10 @@ void displayRankings() {
 void rateTeacher(Student &student) {
     system("clear");
     cout << "\n--- Available Teachers to Rate ---\n";
-    for (int i = 0; i < 5; i++) {
-        if (rand() % 2) { // Simulate which teachers are available for a student
-            cout << teachers[i].id << ". " << teachers[i].name << endl;
-        }
+
+    // Display only the teachers assigned to the student
+    for (int teacherId : student.assignedTeachers) {
+        cout << teachers[teacherId - 1].id << ". " << teachers[teacherId - 1].name << endl;
     }
 
     int teacherId;
