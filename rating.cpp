@@ -54,21 +54,47 @@ string toLowerCase(const string &str) {
 void analyzeComment(const string &comment, int teacherId) {
     string goodKeywords[] = {"good", "excellent", "amazing", "great", "awesome"};
     string badKeywords[] = {"bad", "poor", "terrible", "awful", "horrible"};
+    string negations[] = {"not", "never", "no"};
 
     string lowerComment = toLowerCase(comment);
 
     for (const string &keyword : goodKeywords) {
-        size_t pos = 0;
-        while ((pos = lowerComment.find(keyword, pos)) != string::npos) {
-            teachers[teacherId - 1].goodComments++;
-            pos += keyword.length();
+        size_t pos = lowerComment.find(keyword);
+        while (pos != string::npos) {
+            bool negated = false;
+            for (const string &neg : negations) {
+                size_t negPos = lowerComment.rfind(neg, pos);
+                if (negPos != string::npos && pos - negPos <= 5) {
+                    negated = true;
+                    break;
+                }
+            }
+            if (negated) {
+                teachers[teacherId - 1].badComments++;
+            } else {
+                teachers[teacherId - 1].goodComments++;
+            }
+            pos = lowerComment.find(keyword, pos + 1);
         }
     }
+
     for (const string &keyword : badKeywords) {
-        size_t pos = 0;
-        while ((pos = lowerComment.find(keyword, pos)) != string::npos) {
-            teachers[teacherId - 1].badComments++;
-            pos += keyword.length();
+        size_t pos = lowerComment.find(keyword);
+        while (pos != string::npos) {
+            bool negated = false;
+            for (const string &neg : negations) {
+                size_t negPos = lowerComment.rfind(neg, pos);
+                if (negPos != string::npos && pos - negPos <= 5) {
+                    negated = true;
+                    break;
+                }
+            }
+            if (negated) {
+                teachers[teacherId - 1].goodComments++;
+            } else {
+                teachers[teacherId - 1].badComments++;
+            }
+            pos = lowerComment.find(keyword, pos + 1);
         }
     }
 }
@@ -76,7 +102,7 @@ void analyzeComment(const string &comment, int teacherId) {
 void displayRankings() {
     cout << "\n--- Teacher Rankings ---\n";
     cout << "Rank | ID | Name           | Avg. Rating | Good | Bad \n";
-    cout << "-----+----+----------------+-------------+------+-----\n";
+    cout << "-----+----+---------------+-------------+------+-----\n";
 
     for (int i = 0; i < 5; i++) {
         double avgRating = teachers[i].ratingCount > 0 ? teachers[i].totalRating / teachers[i].ratingCount : 0;
