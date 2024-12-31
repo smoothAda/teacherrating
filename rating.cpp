@@ -58,15 +58,17 @@ void analyzeComment(const string &comment, int teacherId) {
     string lowerComment = toLowerCase(comment);
 
     for (const string &keyword : goodKeywords) {
-        if (lowerComment.find(keyword) != string::npos) {
+        size_t pos = 0;
+        while ((pos = lowerComment.find(keyword, pos)) != string::npos) {
             teachers[teacherId - 1].goodComments++;
-            return;
+            pos += keyword.length();
         }
     }
     for (const string &keyword : badKeywords) {
-        if (lowerComment.find(keyword) != string::npos) {
+        size_t pos = 0;
+        while ((pos = lowerComment.find(keyword, pos)) != string::npos) {
             teachers[teacherId - 1].badComments++;
-            return;
+            pos += keyword.length();
         }
     }
 }
@@ -162,7 +164,7 @@ void studentPortal(Student &student) {
     do {
         cout << "\n--- Student Portal ---\n";
         cout << "1. Rate a Teacher\n";
-        cout << "2. Logout\n";
+        cout << "2. Return to Main Menu\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
