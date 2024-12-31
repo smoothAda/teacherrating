@@ -15,7 +15,6 @@ struct Teacher {
     int ratingCount;
     int goodComments;
     int badComments;
-    double finalScore; // New field for final score
 };
 
 struct Student {
@@ -28,11 +27,11 @@ struct Student {
 };
 
 Teacher teachers[5] = {
-    {1, "Mr. Smith", 0, 0, 0, 0, 0},
-    {2, "Mrs. Johnson", 0, 0, 0, 0, 0},
-    {3, "Ms. Brown", 0, 0, 0, 0, 0},
-    {4, "Mr. Lee", 0, 0, 0, 0, 0},
-    {5, "Mrs. Garcia", 0, 0, 0, 0, 0}
+    {1, "Mr. Smith", 0, 0, 0, 0},
+    {2, "Mrs. Johnson", 0, 0, 0, 0},
+    {3, "Ms. Brown", 0, 0, 0, 0},
+    {4, "Mr. Lee", 0, 0, 0, 0},
+    {5, "Mrs. Garcia", 0, 0, 0, 0}
 };
 
 Student students[4] = {
@@ -74,39 +73,16 @@ void analyzeComment(const string &comment, int teacherId) {
     }
 }
 
-void calculateFinalScores() {
-    for (int i = 0; i < 5; i++) {
-        double avgRating = teachers[i].ratingCount > 0 ? teachers[i].totalRating / teachers[i].ratingCount : 0;
-        teachers[i].finalScore = (0.8 * avgRating) + (0.2 * (teachers[i].goodComments - teachers[i].badComments));
-    }
-}
-
-void sortTeachersByScore() {
-    for (int i = 0; i < 5; i++) {
-        for (int j = i + 1; j < 5; j++) {
-            if (teachers[i].finalScore < teachers[j].finalScore) {
-                Teacher temp = teachers[i];
-                teachers[i] = teachers[j];
-                teachers[j] = temp;
-            }
-        }
-    }
-}
-
 void displayRankings() {
-    calculateFinalScores();
-    sortTeachersByScore();
-
     cout << "\n--- Teacher Rankings ---\n";
-    cout << "Rank | ID | Name           | Avg. Rating | Good | Bad | Final Score\n";
-    cout << "-----+----+---------------+-------------+------+-----+-------------\n";
+    cout << "Rank | ID | Name           | Avg. Rating | Good | Bad \n";
+    cout << "-----+----+----------------+-------------+------+-----\n";
 
     for (int i = 0; i < 5; i++) {
         double avgRating = teachers[i].ratingCount > 0 ? teachers[i].totalRating / teachers[i].ratingCount : 0;
         cout << i + 1 << "    | " << teachers[i].id << "  | " << teachers[i].name;
         cout << string(15 - teachers[i].name.length(), ' ') << " | " << avgRating;
-        cout << "         | " << teachers[i].goodComments << "    | " << teachers[i].badComments;
-        cout << "   | " << teachers[i].finalScore << "\n";
+        cout << "         | " << teachers[i].goodComments << "    | " << teachers[i].badComments << "\n";
     }
 
     cout << "\nPress Enter to return to the main menu...";
@@ -170,6 +146,12 @@ void rateTeacher(Student &student) {
     string comment;
     cout << "Enter your comment: ";
     getline(cin, comment);
+
+    if (comment.length() < 10 || comment.length() > 200) {
+        cout << "Comment must be between 10 and 200 characters. Press Enter to continue...";
+        cin.get();
+        return;
+    }
 
     analyzeComment(comment, teacherId);
 
