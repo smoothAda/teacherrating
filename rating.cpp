@@ -186,7 +186,10 @@ void rateTeacher(Student &student) {
     getline(cin, comment);
 
     if (comment.length() < 10 || comment.length() > 100) {
-        cout << "Comment not submitted successfully. It must be between 10 and 100 characters. Press Enter to continue...";
+        cout << "Comment not submitted successfully. Rating has been recorded. Press Enter to continue...";
+        teachers[teacherId - 1].totalRating += rating;
+        teachers[teacherId - 1].ratingCount++;
+        student.ratedTeachers[student.ratedCount++] = teacherId;
         cin.get();
         return;
     }
