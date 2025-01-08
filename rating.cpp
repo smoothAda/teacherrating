@@ -182,8 +182,14 @@ void rateTeacher(Student &student) {
 
     cin.ignore();
     string comment;
-    cout << "Enter your comment: ";
+    cout << "Enter your comment (10-100 characters): ";
     getline(cin, comment);
+
+    if (comment.length() < 10 || comment.length() > 100) {
+        cout << "Comment not submitted successfully. It must be between 10 and 100 characters. Press Enter to continue...";
+        cin.get();
+        return;
+    }
 
     analyzeComment(comment, teacherId);
 
