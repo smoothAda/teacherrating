@@ -18,6 +18,7 @@ struct Teacher {
     int goodComments;
     int badComments;
 
+    // Calculates and returns the average rating of the teacher
     double getAverageRating() const {
         return ratingCount > 0 ? totalRating / ratingCount : 0;
     }
@@ -49,6 +50,7 @@ Student students[4] = {
 };
 
 // Helper function to convert a string to lowercase (does not handle non-ASCII characters)
+// Converts all characters in the given string to lowercase and returns the result.
 string toLowerCase(const string &str) {
     string result;
     for (char ch : str) {
@@ -58,6 +60,7 @@ string toLowerCase(const string &str) {
 }
 
 // Function to analyze comments (enhanced with negation handling)
+// Processes the comment to determine the number of good and bad comments for a teacher.
 void analyzeComment(const string &comment, int teacherId) {
     string goodKeywords[] = {"good", "excellent", "amazing", "great", "awesome"};
     string badKeywords[] = {"bad", "poor", "terrible", "awful", "horrible"};
@@ -65,6 +68,7 @@ void analyzeComment(const string &comment, int teacherId) {
 
     string lowerComment = toLowerCase(comment);
 
+    // Analyze good keywords
     for (const string &keyword : goodKeywords) {
         size_t pos = lowerComment.find(keyword);
         while (pos != string::npos) {
@@ -85,6 +89,7 @@ void analyzeComment(const string &comment, int teacherId) {
         }
     }
 
+    // Analyze bad keywords
     for (const string &keyword : badKeywords) {
         size_t pos = lowerComment.find(keyword);
         while (pos != string::npos) {
@@ -107,6 +112,7 @@ void analyzeComment(const string &comment, int teacherId) {
 }
 
 // Displays teacher rankings sorted by average rating
+// Sorts the teachers by their average rating in descending order and displays their rankings.
 void displayRankings() {
     // Sort teachers by average rating in descending order
     sort(begin(teachers), end(teachers), [](const Teacher &a, const Teacher &b) {
@@ -127,7 +133,8 @@ void displayRankings() {
     cin.get();
 }
 
-// Allows a student to rate a teacher (does not allow feedback for improvements or suggestions)
+// Allows a student to rate a teacher
+// Facilitates the process of students rating a teacher and optionally leaving a comment.
 void rateTeacher(Student &student) {
     cout << "\n--- Available Teachers to Rate ---\n";
     for (int i = 0; i < 2; i++) {
@@ -139,7 +146,7 @@ void rateTeacher(Student &student) {
     cout << "Enter the Teacher ID to rate: ";
     cin >> teacherId;
 
-    // Check if teacher is allowed for this student (does not check for invalid inputs explicitly)
+    // Check if teacher is allowed for this student
     bool isAllowed = false;
     for (int i = 0; i < 2; i++) {
         if (student.allowedTeachers[i] == teacherId) {
@@ -155,6 +162,7 @@ void rateTeacher(Student &student) {
         return;
     }
 
+    // Check if the teacher has already been rated
     bool alreadyRated = false;
     for (int i = 0; i < student.ratedCount; i++) {
         if (student.ratedTeachers[i] == teacherId) {
@@ -185,6 +193,7 @@ void rateTeacher(Student &student) {
     cout << "Enter your comment (10-100 characters): ";
     getline(cin, comment);
 
+    // Validate comment length
     if (comment.length() < 10 || comment.length() > 100) {
         cout << "Comment not submitted successfully. Rating has been recorded. Press Enter to continue...";
         teachers[teacherId - 1].totalRating += rating;
@@ -204,12 +213,14 @@ void rateTeacher(Student &student) {
     cin.get();
 }
 
-// Admin portal (does not allow adding or removing teachers)
+// Admin portal
+// Allows the admin to view the rankings of all teachers.
 void adminPortal() {
     displayRankings();
 }
 
-// Provides options for students (does not provide teacher feedback or overall ratings)
+// Provides options for students
+// Allows students to either rate a teacher or return to the main menu.
 void studentPortal(Student &student) {
     int choice;
     do {
@@ -231,7 +242,8 @@ void studentPortal(Student &student) {
     } while (true);
 }
 
-// Main menu (does not include a forgot password feature or logout option)
+// Main menu
+// Handles user authentication and provides access to either the admin or student portal.
 void mainMenu() {
     string username, password;
     while (true) {
@@ -261,6 +273,8 @@ void mainMenu() {
     }
 }
 
+// Entry point of the application
+// Starts the main menu loop.
 int main() {
     mainMenu();
     return 0;
