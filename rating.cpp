@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cctype> // For tolower function
+#include <algorithm> // For sort function
 
 using namespace std;
 
@@ -16,6 +17,10 @@ struct Teacher {
     int ratingCount;
     int goodComments;
     int badComments;
+
+    double getAverageRating() const {
+        return ratingCount > 0 ? totalRating / ratingCount : 0;
+    }
 };
 
 // Structure for Student (does not include advanced features like dynamic teacher lists)
@@ -101,13 +106,18 @@ void analyzeComment(const string &comment, int teacherId) {
     }
 }
 
-// Displays teacher rankings (does not sort by best rating or any criteria)
+// Displays teacher rankings sorted by average rating
 void displayRankings() {
+    // Sort teachers by average rating in descending order
+    sort(begin(teachers), end(teachers), [](const Teacher &a, const Teacher &b) {
+        return a.getAverageRating() > b.getAverageRating();
+    });
+
     cout << "\n--- Teacher Rankings ---\n";
     cout << "ID | Name           | Avg. Rating | Good | Bad\n";
     cout << "---+---------------+-------------+------+-----\n";
     for (int i = 0; i < 5; i++) {
-        double averageRating = teachers[i].ratingCount > 0 ? teachers[i].totalRating / teachers[i].ratingCount : 0;
+        double averageRating = teachers[i].getAverageRating();
         cout << teachers[i].id << "  | " << teachers[i].name;
         cout << string(15 - teachers[i].name.length(), ' ') << " | " << averageRating;
         cout << "         | " << teachers[i].goodComments << "    | " << teachers[i].badComments << "\n";
