@@ -114,11 +114,11 @@ void displayRankings() {
     });
 
     cout << "\n--- Teacher Rankings ---\n";
-    cout << "ID | Name           | Avg. Rating | Good | Bad\n";
-    cout << "---+---------------+-------------+------+-----\n";
+    cout << "Rank | ID | Name           | Avg. Rating | Good | Bad\n";
+    cout << "-----+----+---------------+-------------+------+-----\n";
     for (int i = 0; i < 5; i++) {
         double averageRating = teachers[i].getAverageRating();
-        cout << teachers[i].id << "  | " << teachers[i].name;
+        cout << (i + 1) << "    | " << teachers[i].id << "  | " << teachers[i].name;
         cout << string(15 - teachers[i].name.length(), ' ') << " | " << averageRating;
         cout << "         | " << teachers[i].goodComments << "    | " << teachers[i].badComments << "\n";
     }
