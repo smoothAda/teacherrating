@@ -4,11 +4,10 @@
 
 using namespace std;
 
-// Constants for user roles (does not include student roles)
+// Constants for user roles
 const string ADMIN_USERNAME = "admin";
 const string ADMIN_PASSWORD = "admin123";
 
-// Structure for Teacher (does not track subjects or individual student ratings)
 struct Teacher {
     int id;
     string name;
@@ -18,7 +17,6 @@ struct Teacher {
     int badComments;
 };
 
-// Structure for Student (does not include advanced features like dynamic teacher lists)
 struct Student {
     int id;
     string username;
@@ -43,7 +41,7 @@ Student students[4] = {
     {4, "student4", "pass4", {4, 5}, {}, 0}
 };
 
-// Helper function to convert a string to lowercase (does not handle non-ASCII characters)
+// Helper function to convert a string to lowercase
 string toLowerCase(const string &str) {
     string result;
     for (char ch : str) {
@@ -52,56 +50,29 @@ string toLowerCase(const string &str) {
     return result;
 }
 
-// Function to analyze comments (enhanced with negation handling)
+// Function to analyze comments
 void analyzeComment(const string &comment, int teacherId) {
     string goodKeywords[] = {"good", "excellent", "amazing", "great", "awesome"};
     string badKeywords[] = {"bad", "poor", "terrible", "awful", "horrible"};
-    string negations[] = {"not", "never", "no"};
 
     string lowerComment = toLowerCase(comment);
 
     for (const string &keyword : goodKeywords) {
-        size_t pos = lowerComment.find(keyword);
-        while (pos != string::npos) {
-            bool negated = false;
-            for (const string &neg : negations) {
-                size_t negPos = lowerComment.rfind(neg, pos);
-                if (negPos != string::npos && pos - negPos <= 5) {
-                    negated = true;
-                    break;
-                }
-            }
-            if (negated) {
-                teachers[teacherId - 1].badComments++;
-            } else {
-                teachers[teacherId - 1].goodComments++;
-            }
-            pos = lowerComment.find(keyword, pos + 1);
+        size_t pos = 0;
+        while ((pos = lowerComment.find(keyword, pos)) != string::npos) {
+            teachers[teacherId - 1].goodComments++;
+            pos += keyword.length();
         }
     }
-
     for (const string &keyword : badKeywords) {
-        size_t pos = lowerComment.find(keyword);
-        while (pos != string::npos) {
-            bool negated = false;
-            for (const string &neg : negations) {
-                size_t negPos = lowerComment.rfind(neg, pos);
-                if (negPos != string::npos && pos - negPos <= 5) {
-                    negated = true;
-                    break;
-                }
-            }
-            if (negated) {
-                teachers[teacherId - 1].goodComments++;
-            } else {
-                teachers[teacherId - 1].badComments++;
-            }
-            pos = lowerComment.find(keyword, pos + 1);
+        size_t pos = 0;
+        while ((pos = lowerComment.find(keyword, pos)) != string::npos) {
+            teachers[teacherId - 1].badComments++;
+            pos += keyword.length();
         }
     }
 }
 
-// Displays teacher rankings (does not sort by best rating or any criteria)
 void displayRankings() {
     cout << "\n--- Teacher Rankings ---\n";
     cout << "ID | Name           | Avg. Rating | Good | Bad\n";
@@ -117,7 +88,6 @@ void displayRankings() {
     cin.get();
 }
 
-// Allows a student to rate a teacher (does not allow feedback for improvements or suggestions)
 void rateTeacher(Student &student) {
     cout << "\n--- Available Teachers to Rate ---\n";
     for (int i = 0; i < 2; i++) {
@@ -129,7 +99,7 @@ void rateTeacher(Student &student) {
     cout << "Enter the Teacher ID to rate: ";
     cin >> teacherId;
 
-    // Check if teacher is allowed for this student (does not check for invalid inputs explicitly)
+    // Check if teacher is allowed for this student
     bool isAllowed = false;
     for (int i = 0; i < 2; i++) {
         if (student.allowedTeachers[i] == teacherId) {
@@ -185,12 +155,10 @@ void rateTeacher(Student &student) {
     cin.get();
 }
 
-// Admin portal (does not allow adding or removing teachers)
 void adminPortal() {
     displayRankings();
 }
 
-// Provides options for students (does not provide teacher feedback or overall ratings)
 void studentPortal(Student &student) {
     int choice;
     do {
@@ -212,7 +180,6 @@ void studentPortal(Student &student) {
     } while (true);
 }
 
-// Main menu (does not include a forgot password feature or logout option)
 void mainMenu() {
     string username, password;
     while (true) {
