@@ -2,12 +2,22 @@
 #include <string>
 #include <cctype> // For tolower function
 #include <algorithm> // For sort function
+#include <cstdlib> // For system function
 
 using namespace std;
 
 // Constants for user roles (does not include student roles)
 const string ADMIN_USERNAME = "admin";
 const string ADMIN_PASSWORD = "admin123";
+
+// Function to clear the console screen
+void clearScreen() {
+    #if defined(_WIN32) || defined(_WIN64)
+        system("cls"); // Clear screen for Windows
+    #else
+        system("clear"); // Clear screen for Linux/Mac
+    #endif
+}
 
 // Structure for Teacher (does not track subjects or individual student ratings)
 struct Teacher {
@@ -114,6 +124,7 @@ void analyzeComment(const string &comment, int teacherId) {
 // Displays teacher rankings sorted by average rating
 // Sorts the teachers by their average rating in descending order and displays their rankings.
 void displayRankings() {
+    clearScreen();
     // Sort teachers by average rating in descending order
     sort(begin(teachers), end(teachers), [](const Teacher &a, const Teacher &b) {
         return a.getAverageRating() > b.getAverageRating();
@@ -136,6 +147,7 @@ void displayRankings() {
 // Allows a student to rate a teacher
 // Facilitates the process of students rating a teacher and optionally leaving a comment.
 void rateTeacher(Student &student) {
+    clearScreen();
     cout << "\n--- Available Teachers to Rate ---\n";
     for (int i = 0; i < 2; i++) {
         int teacherId = student.allowedTeachers[i];
@@ -224,6 +236,7 @@ void adminPortal() {
 void studentPortal(Student &student) {
     int choice;
     do {
+        clearScreen();
         cout << "\n--- Student Portal ---\n";
         cout << "1. Rate a Teacher\n";
         cout << "2. Return to Main Menu\n";
@@ -247,6 +260,7 @@ void studentPortal(Student &student) {
 void mainMenu() {
     string username, password;
     while (true) {
+        clearScreen();
         cout << "\n--- Teacher Rating System ---\n";
         cout << "Enter Username: ";
         cin >> username;
