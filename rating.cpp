@@ -34,13 +34,13 @@ struct Teacher {
     }
 };
 
-// Structure for Student (does not include advanced features like dynamic teacher lists)
+// Structure for Student (increased allowedTeachers size to 5)
 struct Student {
     int id;
     string username;
     string password;
-    int allowedTeachers[2]; // List of teachers assigned to the student (fixed size for simplicity)
-    int ratedTeachers[2];   // To track which teachers a student has rated
+    int allowedTeachers[5]; // List of teachers assigned to the student
+    int ratedTeachers[5];   // To track which teachers a student has rated
     int ratedCount;         // Count of rated teachers
 };
 
@@ -52,11 +52,21 @@ Teacher teachers[5] = {
     {5, "Mrs. Garcia", 0, 0, 0, 0}
 };
 
-Student students[4] = {
-    {1, "student1", "pass1", {1, 2}, {}, 0},
-    {2, "student2", "pass2", {2, 3}, {}, 0},
-    {3, "student3", "pass3", {1, 3}, {}, 0},
-    {4, "student4", "pass4", {4, 5}, {}, 0}
+Student students[14] = {
+    {1, "student1", "pass1", {1, 2, 3, 4, 5}, {}, 0},
+    {2, "student2", "pass2", {1, 2, 3, 4, 5}, {}, 0},
+    {3, "student3", "pass3", {1, 2, 3, 4, 5}, {}, 0},
+    {4, "student4", "pass4", {1, 2, 3, 4, 5}, {}, 0},
+    {5, "student5", "pass5", {1, 2, 3, 4, 5}, {}, 0},
+    {6, "student6", "pass6", {1, 2, 3, 4, 5}, {}, 0},
+    {7, "student7", "pass7", {1, 2, 3, 4, 5}, {}, 0},
+    {8, "student8", "pass8", {1, 2, 3, 4, 5}, {}, 0},
+    {9, "student9", "pass9", {1, 2, 3, 4, 5}, {}, 0},
+    {10, "student10", "pass10", {1, 2, 3, 4, 5}, {}, 0},
+    {11, "student11", "pass11", {1, 2, 3, 4, 5}, {}, 0},
+    {12, "student12", "pass12", {1, 2, 3, 4, 5}, {}, 0},
+    {13, "student13", "pass13", {1, 2, 3, 4, 5}, {}, 0},
+    {14, "student14", "pass14", {1, 2, 3, 4, 5}, {}, 0}
 };
 
 // Helper function to convert a string to lowercase (does not handle non-ASCII characters)
@@ -122,7 +132,7 @@ void analyzeComment(const string &comment, int teacherId) {
 }
 
 // Displays teacher rankings sorted by average rating
-// Sorts the teachers by their average rating in descending order and displays their rankings.
+// Sorts the teachers by average rating in descending order and displays their rankings.
 void displayRankings() {
     clearScreen();
     // Sort teachers by average rating in descending order
@@ -149,7 +159,7 @@ void displayRankings() {
 void rateTeacher(Student &student) {
     clearScreen();
     cout << "\n--- Available Teachers to Rate ---\n";
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 5; i++) {
         int teacherId = student.allowedTeachers[i];
         cout << teacherId << ". " << teachers[teacherId - 1].name << "\n";
     }
@@ -160,7 +170,7 @@ void rateTeacher(Student &student) {
 
     // Check if teacher is allowed for this student
     bool isAllowed = false;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 5; i++) {
         if (student.allowedTeachers[i] == teacherId) {
             isAllowed = true;
             break;
@@ -271,7 +281,7 @@ void mainMenu() {
             adminPortal();
         } else {
             bool loggedIn = false;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 14; i++) {
                 if (username == students[i].username && password == students[i].password) {
                     studentPortal(students[i]);
                     loggedIn = true;
